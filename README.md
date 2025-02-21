@@ -6,7 +6,7 @@ Every player must have it installed
 * Randomize initial character stats
 * Randomize shop items + their prices
 * Randomize item skills
-* * Note: due to an imbalance created by the randomizer, a slight damage buff has been created for:
+* * **Note**: due to an imbalance created by the randomizer, a slight damage buff has been applied to weapons having either one of those:
   * awareness
   * toughness
   * luck
