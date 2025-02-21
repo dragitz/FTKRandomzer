@@ -18,3 +18,9 @@ Add references to:
 
 Copy your compiled dll in:
 ``\For The King\BepInEx\plugins``
+
+
+# Bugs
+LootItems.cs --> you might get duplicate items, need new hook
+RandomizeDShopPrices.cs --> perhaps it is already fixed, but the game might display different prices to other palyers (I had this bug)
+RandomizeDShopItems.cs --> some items never got developed, so you might see debug strings, funny to see but useless in game
