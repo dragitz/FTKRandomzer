@@ -7,8 +7,8 @@ Every player must have it installed
 Add references to:
 ```
 \For The King\BepInEx\core\0Harmony.dll
-\For The King\FTK_Data\Managed\Assembly-CSharp.dll
 \For The King\BepInEx\core\BepInEx.dll
+\For The King\FTK_Data\Managed\Assembly-CSharp.dll
 \For The King\FTK_Data\Managed\Rewired_Core.dll
 \For The King\FTK_Data\Managed\Rewired_Windows_Lib.dll
 \For The King\FTK_Data\Managed\UnityEngine.dll
