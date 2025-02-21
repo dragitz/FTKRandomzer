@@ -2,6 +2,14 @@ Requires: https://thunderstore.io/c/for-the-king/p/BepInEx/BepInExPack_ForTheKin
 
 Every player must have it installed
 
+# Mod
+* Randomize initial character stats
+* Randomize shop items + their prices
+* Randomize item skills
+* Randomize extra loot gained from fighting enemies (currently slightly bugged, but usable)
+
+
+
 # Compiling
 
 Add references to:
