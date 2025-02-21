@@ -1,6 +1,6 @@
 Requires: https://thunderstore.io/c/for-the-king/p/BepInEx/BepInExPack_ForTheKing/
 
-Every player must have it installed
+__Every player must have the mod installed.__
 
 # Mod
 * Randomize initial character stats
