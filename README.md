@@ -6,6 +6,12 @@ Every player must have it installed
 * Randomize initial character stats
 * Randomize shop items + their prices
 * Randomize item skills
+* * Note: due to an imbalance created by the randomizer, a slight damage buff has been created for:
+  * awareness
+  * toughness
+  * luck
+  * vitality
+  * quickness
 * Randomize extra loot gained from fighting enemies (currently slightly bugged, but usable)
 
 
