@@ -20,9 +20,11 @@ namespace FTKRandomizer.Patches
             int MapSeed = GameLogic.Instance.m_MapGenRandomSeed;
             int item_id = (int)_enumID;
             int SEED = MapSeed + item_id;
+
             System.Random rand = new System.Random(SEED);
 
             __result = __instance.GetEntryByInt(item_id);
+
 
             // Ensure we don't modify important items
             if (
@@ -41,6 +43,10 @@ namespace FTKRandomizer.Patches
                     var skill = (FTK_weaponStats2.SkillType)values.GetValue(rand.Next(1, 7));
                     __result._skilltest = skill;
 
+                    // the idea is to equally distribute all skills, this way players have a higher probability of finding something that works for them
+                    // Weighted random selection
+
+
                     // Those will be affected the most, slight damage increase
                     if (
                         __result._skilltest == FTK_weaponStats2.SkillType.awareness ||
@@ -58,6 +64,8 @@ namespace FTKRandomizer.Patches
                         {
                             int minDmg = 5;
                             int maxDmg = 7;
+
+                            if (__result._skilltest == FTK_weaponStats2.SkillType.luck) { minDmg = 8; maxDmg = 10; } // luck is fun
 
                             var multiplier = System.Math.Max((int)__result.m_ItemRarity, 1);
 

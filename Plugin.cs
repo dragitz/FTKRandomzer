@@ -1,10 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using FTKRandomizer.Patches;
-using GridEditor;
 using HarmonyLib;
-using System;
-using System.Collections.Generic;
 
 namespace FTKRandomizer
 {
@@ -35,10 +32,14 @@ namespace FTKRandomizer
             harmony.PatchAll(typeof(Randomizer));
 
             harmony.PatchAll(typeof(RandomizeDShopPrices));
-            harmony.PatchAll(typeof(LootItems));
+
             harmony.PatchAll(typeof(RandomizeDShopItems));
             harmony.PatchAll(typeof(RandomizeDInitialStats));
             harmony.PatchAll(typeof(RandomizeAllItemStats));
+            harmony.PatchAll(typeof(TownEE));
+
+            harmony.PatchAll(typeof(LootItems));
+            harmony.PatchAll(typeof(RandomizeDItemEffects));
         }
     }
 

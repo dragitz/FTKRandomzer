@@ -2,11 +2,6 @@
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-using static TownManager;
 
 namespace FTKRandomizer.Patches
 {
@@ -21,14 +16,14 @@ namespace FTKRandomizer.Patches
         static bool Prefix(FTK_progressionTier.ID _tier, ref List<FTK_itembase.ID> __result, TownManager __instance)
         {
             //int itemLevel = FTK_progressionTierDB.Get(_tier).m_ItemLevel;
-            
-            
-            
+
+
+
             System.Random rand = new System.Random();
             Array values = Enum.GetValues(typeof(FTK_itembase.ID));
             FTK_itembase.ID[] randomIds = new FTK_itembase.ID[10];  // <-- 10 new items in the shop
 
-            
+
 
             var MapSeed = GameLogic.Instance.m_MapGenRandomSeed;
 
@@ -50,11 +45,18 @@ namespace FTKRandomizer.Patches
                     }
 
                     if (
-                        entry.m_ItemRarity == FTK_itemRarityLevel.ID.lore || 
+                        entry.m_ItemRarity == FTK_itemRarityLevel.ID.lore ||
                         entry.m_ItemRarity == FTK_itemRarityLevel.ID.quest ||
-                        entry._goldValue <= 1)
+                        entry.m_ItemRarity == FTK_itemRarityLevel.ID.None ||
+                        entry._goldValue <= 1 || entry._goldValue >= 500 ||      // Super pricy items will never be bought
+                        entry.GetLocalizedName().ToLower().Contains("str_") ||
+                        entry.GetLocalizedName().ToLower().Contains("debug") ||
+                        entry.GetLocalizedName().ToLower().Contains("database") ||
+                        !entry.m_Dropable ||
+                        entry.m_FilterDebug
+                        )
                         continue;
-                    
+
                     // Item is valid 
                     randomIds[i] = item_id;
                     break;

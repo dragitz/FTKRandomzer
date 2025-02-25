@@ -1,7 +1,9 @@
 ﻿using GridEditor;
 using HarmonyLib;
 using Rewired;
+using RoomDef;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -71,51 +73,71 @@ namespace FTKRandomizer.Patches
                 Debug.Log("=============== " + __instance.m_CharacterStats.m_AugmentedTalent);
                 Debug.Log("=============== " + __instance.m_CharacterStats.m_AugmentedAwareness);
                 Debug.Log("=============== " + __instance.m_CharacterStats.m_AugmentedQuickness);
+            
+            
+                float maxValue = 0.02f;
 
+                float[] randos = new float[5];
 
-                float maxValue = 0.03f;
+                randos[0] = (float)rand.NextDouble() * maxValue;
+                randos[1] = (float)rand.NextDouble() * maxValue;
+                randos[2] = (float)(-maxValue * rand.NextDouble());
+                randos[3] = (float)(-maxValue * rand.NextDouble());
+                randos[4] = (float)(rand.NextDouble() * (maxValue * 2) - maxValue);
 
-                // Randomize all values
-                float toughness = (float)(rand.NextDouble() * (maxValue * 2) - maxValue); // -0.05 to 0.05
-                float vitality = (float)(rand.NextDouble() * (maxValue * 2) - maxValue);  // -0.05 to 0.05
-                int damageMagic = rand.Next(-5, 6);  // -5 to 5
-                float talent = (float)(rand.NextDouble() * (maxValue * 2) - maxValue);    // -0.05 to 0.05
-                float awareness = (float)(rand.NextDouble() * (maxValue * 2) - maxValue); // -0.05 to 0.05
-                float quickness = (float)(rand.NextDouble() * (maxValue * 2) - maxValue); // -0.05 to 0.05
-
-                // Check if all are negative
-                if (toughness <= 0 && vitality <= 0 && damageMagic <= 0 &&
-                    talent <= 0 && awareness <= 0 && quickness <= 0)
+                for (int i = 0; i < randos.Length - 1; ++i) // shuffle, thank you https://stackoverflow.com/a/69504187
                 {
-                    // Force at least one positive value
-                    int forcePositive = rand.Next(0, 6);
-                    switch (forcePositive)
-                    {
-                        case 0: toughness = Math.Abs(toughness); break;
-                        case 1: vitality = Math.Abs(vitality); break;
-                        case 2: damageMagic = Math.Abs(damageMagic) + 1; break;
-                        case 3: talent = Math.Abs(talent); break;
-                        case 4: awareness = Math.Abs(awareness); break;
-                        case 5: quickness = Math.Abs(quickness); break;
-                    }
+                    int r = rand.Next(i, randos.Length);
+                    (randos[r], randos[i]) = (randos[i], randos[r]);
                 }
 
-
-
+                // Randomize all values
+                float toughness = randos[0];
+                float vitality = randos[1];
+                int damageMagic = rand.Next(-5, 6);  // -5 to 5
+                float talent = randos[2];
+                float awareness = randos[3];
+                float quickness = randos[4];
+            
+                // Check if all are negative
+                //if (toughness <= 0 && vitality <= 0 && damageMagic <= 0 &&
+                //    talent <= 0 && awareness <= 0 && quickness <= 0)
+                //{
+                //    // Force at least one positive value
+                //    int forcePositive = rand.Next(0, 6);
+                //    switch (forcePositive)
+                //    {
+                //        case 0: toughness = Math.Abs(toughness); break;
+                //        case 1: vitality = Math.Abs(vitality); break;
+                //        case 2: damageMagic = Math.Abs(damageMagic) + 1; break;
+                //        case 3: talent = Math.Abs(talent); break;
+                //        case 4: awareness = Math.Abs(awareness); break;
+                //        case 5: quickness = Math.Abs(quickness); break;
+                //    }
+                //}
+            
+            
+            
                 // Apply values
                 __instance.m_CharacterStats.m_AugmentedToughness += toughness;
                 __instance.m_CharacterStats.m_AugmentedVitality += vitality;
-                __instance.m_CharacterStats.m_AugmentedDamageMagic += damageMagic;
+            
+                // base damage                
+                //__instance.m_CharacterStats.m_AugmentedDamageMagic += damageMagic;
+                //__instance.m_CharacterStats.m_AugmentedDamagePhysical += damageMagic;
+
                 __instance.m_CharacterStats.m_AugmentedTalent += talent;
                 __instance.m_CharacterStats.m_AugmentedAwareness += awareness;
                 __instance.m_CharacterStats.m_AugmentedQuickness += quickness;
-
+            
                 __instance.m_CharacterStats.m_AugmentedLuck += (float)(rand.NextDouble() * (maxValue * 2) - maxValue);
 
+                // focus is an interesting one to change, but the evade is risky
                 __instance.m_CharacterStats.m_AugmentedEvadeRating += (float)(rand.NextDouble() * (maxValue * 2) - maxValue);
                 __instance.m_CharacterStats.m_AugmentedMaxFocus += rand.Next(-1, 2);
             }
 
+            
 
             if (11 < __instance.m_PhotonView.instantiationData.Length)
             {
