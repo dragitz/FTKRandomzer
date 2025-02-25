@@ -23,6 +23,7 @@ Add references to:
 \For The King\BepInEx\core\0Harmony.dll
 \For The King\BepInEx\core\BepInEx.dll
 \For The King\FTK_Data\Managed\Assembly-CSharp.dll
+\For The King\FTK_Data\Managed\Assembly-CSharp-firstpass.dll
 \For The King\FTK_Data\Managed\Rewired_Core.dll
 \For The King\FTK_Data\Managed\Rewired_Windows_Lib.dll
 \For The King\FTK_Data\Managed\UnityEngine.dll
@@ -36,10 +37,5 @@ Copy your compiled dll in:
 
 # Bugs
 
-* LootItems.cs --> you might get duplicate items, need new hook
-
-* RandomizeDShopPrices.cs --> perhaps it is already fixed, but the game might display different prices to other palyers (I had this bug)
-
 * RandomizeDShopItems.cs --> some items never got developed, so you might see debug strings, funny to see but useless in game
-
-* Randomization logic --> it is a super simple random, so it does the job, but not truly happy witht the results. must be improved (and synced between players)
+* Int isn't randomized in the character stats
