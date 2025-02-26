@@ -10,12 +10,35 @@ namespace FTKRandomizer.Patches
     [HarmonyPatch(typeof(GameLogic))]
     public class LootItems
     {
+        public static int Incrementer = 0;
+        public static List<FTK_itembase.ID> FOUND_ITEMS = new List<FTK_itembase.ID>();
+
         [HarmonyPatch("FillLootDropList")]
         [HarmonyPrefix]
         static bool FillLootDropListPatch(ArrayList _arrayList, int _playerCount, FTK_enemyCombat.ItemDrops[] _itemDrops, int[] _itemDropLevels, RewardData _rewards, ref int _perPlayerGold, ref int _perPlayerXP, bool _endDungeon)
         {
             int MapSeed = GameLogic.Instance.m_MapGenRandomSeed;
-            int SEED = MapSeed;
+            int Turn = GameFlow.Instance.m_RoundCount;
+            int PTurn = (int)GameFlowMC.Instance.m_TurnCount;
+            int TurnIndex = (int)GameFlowMC.Instance.m_PlayerCurrentTurn.m_TurnIndex;
+
+            int Gold = _rewards.Gold;
+            int SEED = MapSeed + Turn + PTurn + TurnIndex + Gold + _playerCount + Incrementer;
+
+            Incrementer++;
+
+            List<FTKPlayerID> Players = EncounterSessionMC.Instance.m_AllCombtatantsAlive;
+            foreach (FTKPlayerID player in Players)
+            {
+                SEED += player.m_PhotonID + player.TurnIndex;
+                SEED += player.GetCow().m_CharacterStats.m_ActionPoints;
+                SEED += player.GetCow().m_CharacterStats.GetWeaponMaxDamage();
+                SEED += player.GetCow().m_CharacterStats.MaxHealth;
+                SEED += (int)player.GetCow().m_CharacterStats.Luck;
+                SEED += (int)player.GetCow().m_CharacterStats.MaxFocus;
+                SEED += player.GetCow().m_CharacterStats.GetPackItems(FTK_itembase.ObjectType.herb, false).Count;
+                SEED += (int)player.GetCow().m_CharacterStats.GetPipe();
+            }
 
             _arrayList.Clear();
             foreach (FTK_itembase.ID item in _rewards.Items)
@@ -68,14 +91,15 @@ namespace FTKRandomizer.Patches
                 FTK_itembase item2_stats = FTK_itemsDB.GetDB()?.GetEntry(item2);
 
                 while (
-                    entry == null || 
-                    entry.m_MaxLevel <= ((int)GameFlow.Instance.AveragePlayerLevel) || 
-                    entry.m_MaxLevel >= ((int)GameFlow.Instance.AveragePlayerLevel) + 2
+                    entry == null ||
+                    entry.m_MinLevel > ((int)GameFlow.Instance.AveragePlayerLevel) ||
+                    FOUND_ITEMS.Contains(item_id)
                     )
                 {
                     item_id = (FTK_itembase.ID)values.GetValue(rand.Next(values.Length));
                     entry = FTK_itemsDB.GetDB()?.GetEntry(item_id);
                 }
+                FOUND_ITEMS.Add(item_id);
 
                 Debug.Log("##### random done");
                 Debug.Log("valid item id:: " + item2.ToString());
@@ -94,14 +118,8 @@ namespace FTKRandomizer.Patches
                 {
                     while (true)
                     {
-
-                        //entry = FTK_itemsDB.GetDB()?.GetEntry(FTK_itembase.ID.reapersplume);
-
-                        //
-                        //FTK_itemRarityLevel rarity = FTK_itemRarityLevelDB.Get(entry.m_ID);
                         if (
                             entry == null ||
-                            //var TT = FTK_itembase.ID.valeore;
 
                             // some items don't have a rarity assigned, prevents softlock after battle when obtaining wip items (eg. "valeore" )
                             entry.m_ItemRarity == FTK_itemRarityLevel.ID.None ||
@@ -136,7 +154,7 @@ namespace FTKRandomizer.Patches
 
             }
             _perPlayerXP = FTKUtil.RoundToInt(num3 / (float)_playerCount);
-            return false; // Prevents the original method from running
+            return false;
         }
     }
 

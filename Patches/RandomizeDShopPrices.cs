@@ -1,7 +1,6 @@
 ﻿using GridEditor;
 using HarmonyLib;
 using System;
-using static uiLocationMenu;
 
 
 namespace FTKRandomizer.Patches
@@ -33,6 +32,7 @@ namespace FTKRandomizer.Patches
             int AveragePlayerLevel = (int)GameFlow.Instance.AveragePlayerLevel;
             //Debug.Log($"Round Count: {GameFlow.Instance.m_RoundCount}");
 
+            // [Error  : Unity Log] NullReferenceException: Object reference not set to an instance of an object
 
             //SEED = Turn * MapSeed +
             //       Turn * __instance._goldValue +
@@ -46,7 +46,7 @@ namespace FTKRandomizer.Patches
             SEED += Turn * __instance._goldValue;
             SEED -= Turn * __instance.m_MinLevel;
             SEED += Turn * __instance.m_MaxLevel;
-            
+
             rand = new System.Random((int)SEED);
 
             int amount = rand.Next(1, (int)Math.Max(_goldValue / 1.5, 1));
@@ -70,11 +70,9 @@ namespace FTKRandomizer.Patches
                 flag = false;
             }
             __result = FTKUtil.Price(newPrice, _poi.GetCostMultiplier(_cow), flag);
-
-            // Prevents original method from running
             return false;
         }
     }
 
-    
+
 }
