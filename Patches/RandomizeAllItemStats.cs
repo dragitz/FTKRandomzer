@@ -45,8 +45,12 @@ namespace FTKRandomizer.Patches
 
                     // the idea is to equally distribute all skills, this way players have a higher probability of finding something that works for them
                     // Weighted random selection
+                    // but for now I'm going to use a simple random
 
+                    if(__result.m_IsWeapon)
+                        __result._slots = rand.Next(1, 5);
 
+                    //__result._dmgtype
                     // Those will be affected the most, slight damage increase
                     if (
                         __result._skilltest == FTK_weaponStats2.SkillType.awareness ||
@@ -62,14 +66,21 @@ namespace FTKRandomizer.Patches
                         }
                         else
                         {
-                            int minDmg = 5;
-                            int maxDmg = 7;
 
-                            if (__result._skilltest == FTK_weaponStats2.SkillType.luck) { minDmg = 8; maxDmg = 10; } // luck is fun
+                            // Feb. 27 2025: changing buff to a fixed one instead of random (test 1)
+                            int buff = 3;
+                            int multiplier = 1;
+                            int finalBuff;
 
-                            var multiplier = System.Math.Max((int)__result.m_ItemRarity, 1);
+                            if (__result._skilltest == FTK_weaponStats2.SkillType.luck) { buff = 5; } // luck is fun
 
-                            __result._maxdmg += rand.Next(minDmg * multiplier, maxDmg * multiplier);
+                            if(__result.m_ItemRarity == FTK_itemRarityLevel.ID.rare) { multiplier = 2;}
+                            if(__result.m_ItemRarity == FTK_itemRarityLevel.ID.artifact) { multiplier = 3;}
+
+                            finalBuff = buff * multiplier;
+
+
+                            __result._maxdmg += finalBuff;
                             WeaponDamageDB[item_id] = __result._maxdmg;
                         }
                     }

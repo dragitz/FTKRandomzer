@@ -40,6 +40,8 @@ namespace FTKRandomizer
 
             harmony.PatchAll(typeof(LootItems));
             harmony.PatchAll(typeof(RandomizeDItemEffects));
+            
+            //harmony.PatchAll(typeof(TestRandomModifier));
         }
     }
 

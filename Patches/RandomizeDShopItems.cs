@@ -61,7 +61,7 @@ namespace FTKRandomizer.Patches
                         entry.m_ItemRarity == FTK_itemRarityLevel.ID.lore ||
                         entry.m_ItemRarity == FTK_itemRarityLevel.ID.quest ||
                         entry.m_ItemRarity == FTK_itemRarityLevel.ID.None ||
-                        entry._goldValue <= 1 || entry._goldValue >= 500 ||      // Super pricy items
+                        entry._goldValue <= 19 || entry._goldValue >= 500 ||      // Super pricy items
                         entry.GetLocalizedName().ToLower().Contains("str_") ||
                         entry.GetLocalizedName().ToLower().Contains("debug") ||
                         entry.GetLocalizedName().ToLower().Contains("database") ||

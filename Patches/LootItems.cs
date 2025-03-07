@@ -92,7 +92,8 @@ namespace FTKRandomizer.Patches
 
                 while (
                     entry == null ||
-                    entry.m_MinLevel > ((int)GameFlow.Instance.AveragePlayerLevel) ||
+                    entry.m_MaxLevel > ((int)GameFlow.Instance.AveragePlayerLevel) ||
+                    entry._goldValue > 20 * Math.Max((int)GameFlow.Instance.AveragePlayerLevel, 1) ||   // 90, 40, 20 -> bug fix + max level-> 20
                     FOUND_ITEMS.Contains(item_id)
                     )
                 {

@@ -27,19 +27,8 @@ namespace FTKRandomizer.Patches
             //__instance.m_ID = "bladeGlass03";
             int MapSeed = GameLogic.Instance.m_MapGenRandomSeed;
             int Turn = GameFlow.Instance.m_RoundCount;
-            int TI1 = GameLogic.Instance.m_CurrentPlayer.TurnIndex;
-            int TI2 = GameLogic.Instance.m_CurrentPlayer.m_TurnIndex;
-            int AveragePlayerLevel = (int)GameFlow.Instance.AveragePlayerLevel;
-            //Debug.Log($"Round Count: {GameFlow.Instance.m_RoundCount}");
 
             // [Error  : Unity Log] NullReferenceException: Object reference not set to an instance of an object
-
-            //SEED = Turn * MapSeed +
-            //       Turn * __instance._goldValue +
-            //       Turn * (__instance.m_MaxLevel + Turn + __instance.m_MinLevel + Turn) +
-            //       (Turn + TI1) * MapSeed + (Turn + TI2) * MapSeed;
-
-            //SEED = (Turn + TI1) * MapSeed + (Turn + TI2) * MapSeed;
 
             SEED = 0;
             SEED += MapSeed + Turn;
@@ -49,10 +38,7 @@ namespace FTKRandomizer.Patches
 
             rand = new System.Random((int)SEED);
 
-            int amount = rand.Next(1, (int)Math.Max(_goldValue / 1.5, 1));
-
-
-            // Use the same Random instance to get the same sequence
+            int amount = rand.Next(1, (int)Math.Max(_goldValue / 1.5, 3));
             if (rand.Next(101) <= 50)
             {
                 newPrice = _goldValue + amount;

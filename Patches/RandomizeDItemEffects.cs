@@ -57,8 +57,12 @@ namespace FTKRandomizer.Patches
                 SEED += (int)__instance.m_WeaponType;
                 SEED += (int)__instance.m_WeaponSubType;
                 SEED += (int)__instance.m_WeaponMaterial;
-                SEED += (int)ProfDB.Count;
+
+
+                //SEED += ProfDB.Count;
                 System.Random rand = new System.Random(SEED);
+
+                
 
                 FTK_proficiencyTable.ID assign;
 
