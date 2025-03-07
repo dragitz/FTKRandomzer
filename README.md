@@ -16,7 +16,9 @@ __Every player must have the mod installed.__
   * quickness
 * Randomize extra loot gained from fighting enemies
 
+![weapons](https://github.com/user-attachments/assets/7fd856e2-9730-4287-863a-68b77cb3b6f8)
 
+![shop](https://github.com/user-attachments/assets/3656cfbf-5632-4fad-b73a-5b37af5c2c8b)
 
 # Compiling
 
