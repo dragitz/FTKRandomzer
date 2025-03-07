@@ -90,30 +90,16 @@ namespace FTKRandomizer.Patches
                 Debug.Log("##### init");
                 FTK_itembase item2_stats = FTK_itemsDB.GetDB()?.GetEntry(item2);
 
-                while (
-                    entry == null ||
-                    entry.m_MaxLevel > ((int)GameFlow.Instance.AveragePlayerLevel) ||
-                    entry._goldValue > 20 * Math.Max((int)GameFlow.Instance.AveragePlayerLevel, 1) ||   // 90, 40, 20 -> bug fix + max level-> 20
-                    FOUND_ITEMS.Contains(item_id)
-                    )
-                {
-                    item_id = (FTK_itembase.ID)values.GetValue(rand.Next(values.Length));
-                    entry = FTK_itemsDB.GetDB()?.GetEntry(item_id);
-                }
-                FOUND_ITEMS.Add(item_id);
-
-                Debug.Log("##### random done");
-                Debug.Log("valid item id:: " + item2.ToString());
                 if (
                     item2_stats == null ||
-                    //entry.m_MinLevel <= ((int)GameFlow.Instance.AveragePlayerLevel) || // game might become too easy and not fun on the long run
-
                     item2_stats.m_ItemRarity == FTK_itemRarityLevel.ID.quest ||
                     item2_stats.m_ItemRarity == FTK_itemRarityLevel.ID.lore ||
                     item2_stats.m_ItemRarity == FTK_itemRarityLevel.ID.artifact)
                 {
-                    Debug.Log("##### item normal mod");
+                    Debug.Log("##### item normal mod"); // If you see this in console, it means the item did not get replaced
                     _arrayList.Add(item2.ToString());
+                    
+                    FOUND_ITEMS.Add(item2); // ensure we can not find unmodded items
                 }
                 else
                 {
@@ -134,8 +120,12 @@ namespace FTKRandomizer.Patches
 
                             // FTK_itembase.ID.reapersplume still goes through
                             !entry.m_Dropable ||
-                            entry.m_FilterDebug
+                            entry.m_FilterDebug ||
                             // now it seems to be properly fixed
+                            
+                            entry.m_MaxLevel > Math.Max((int)GameFlow.Instance.AveragePlayerLevel, 1) ||
+                            entry._goldValue > 20 * Math.Max((int)GameFlow.Instance.AveragePlayerLevel, 1) ||
+                            FOUND_ITEMS.Contains(item_id) // The same drop should not happen twice
                             )
                         {
                             item_id = (FTK_itembase.ID)values.GetValue(rand.Next(values.Length));
@@ -146,10 +136,13 @@ namespace FTKRandomizer.Patches
 
 
                         if (entry._goldValue > 1)
+                        {
+                            FOUND_ITEMS.Add(item_id);
                             break;
+                        }
                     }
                     Debug.Log("##### item super mod");
-                    Debug.Log("new item id: " + item_id.ToString());
+                    Debug.Log("new item id: " + item_id.ToString()); // item got replaced
                     _arrayList.Add(item_id.ToString());
                 }
 

@@ -36,7 +36,7 @@ namespace FTKRandomizer
             harmony.PatchAll(typeof(RandomizeDShopItems));
             harmony.PatchAll(typeof(RandomizeDInitialStats));
             harmony.PatchAll(typeof(RandomizeAllItemStats));
-            harmony.PatchAll(typeof(TownEE));
+            //harmony.PatchAll(typeof(TownEE));
 
             harmony.PatchAll(typeof(LootItems));
             harmony.PatchAll(typeof(RandomizeDItemEffects));

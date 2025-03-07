@@ -47,6 +47,7 @@ namespace FTKRandomizer.Patches
                     // Weighted random selection
                     // but for now I'm going to use a simple random
 
+                    // Randomze the rolls too lol
                     if(__result.m_IsWeapon)
                         __result._slots = rand.Next(1, 5);
 

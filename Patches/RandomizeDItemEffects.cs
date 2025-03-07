@@ -12,14 +12,6 @@ namespace FTKRandomizer.Patches
     class RandomizeDItemEffects
     {
 
-        // TODO: ensure mobs do not get randomized too? perhaps it's a feature
-        // TODO: prevent bad skills from being selected (debug, wip, remove immunities from mobs, kraken attack, ecc..) ..how?
-        //              ^-- we swap a skill with another of the same
-        //              ProficiencyBase.Category
-        //              The idea is that it should naturally eliminate the ones that don't make sense
-        //
-        //              Or we swap it with same weapon skills (if bow, then I can use any skill dedicated to bows)
-
         // WeaponID:ProficiencyID
         public static Dictionary<FTK_proficiencyTable.ID, FTK_proficiencyTable.ID> ProfDB = new Dictionary<FTK_proficiencyTable.ID, FTK_proficiencyTable.ID>();
         public static List<FTK_proficiencyTable.ID> UsedProf = new List<FTK_proficiencyTable.ID>();
@@ -27,6 +19,7 @@ namespace FTKRandomizer.Patches
 
         static bool Prefix(Weapon __instance, ref List<FTK_proficiencyTable.ID> __result)
         {
+            // Default behavior when gamelogic does not exist
             List<FTK_proficiencyTable.ID> list = new List<FTK_proficiencyTable.ID>();
             if (GameLogic.Instance == null)
             {
@@ -41,10 +34,10 @@ namespace FTKRandomizer.Patches
                 return false;
             }
 
+            // Some mobs will have randomized skills too, you may even get a bat that protects itself, good luck!
+
             int MapSeed = GameLogic.Instance.m_MapGenRandomSeed;
             int SEED = MapSeed;
-
-
 
             if (__instance.m_ProficiencyEffects != null)
             {
@@ -57,9 +50,23 @@ namespace FTKRandomizer.Patches
                 SEED += (int)__instance.m_WeaponType;
                 SEED += (int)__instance.m_WeaponSubType;
                 SEED += (int)__instance.m_WeaponMaterial;
+                
+                
+                /*
+                Since I haven't found a way to get the specific item id of the weapon,
+
+                I'm storing the original proficiency id and its replacement into a dictionary
+                
+                I need to keep things as simple as possible, because of sync
+
+                Eg. this one can not be used:
+                    SEED += ProfDB.Count;
+                
+                even a simple delay caused by lag, will make things out of sync ! Meaning players may see different proficiencies (weapon skills)
+                Which is fun, but when you want to share your weapon with a friend, if not in sync, they will see other stats, rendering the trade (potentially) useless
+                */
 
 
-                //SEED += ProfDB.Count;
                 System.Random rand = new System.Random(SEED);
 
                 
@@ -80,7 +87,7 @@ namespace FTKRandomizer.Patches
                             var uno = FTK_proficiencyTableDB.Get(assign);
 
 
-                            // Assuming FTK_proficiencyTable has a default constructor
+                            // Assuming FTK_proficiencyTable has a default constructor (spoiler, it does)
                             var instance = new FTK_proficiencyTable();
                             var method = instance.GetType().GetMethod("GetCategoryDescription", BindingFlags.NonPublic | BindingFlags.Instance);
                             string result = (string)method.Invoke(instance, null);
