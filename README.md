@@ -20,6 +20,8 @@ __Every player must have the mod installed.__
 
 ![shop](https://github.com/user-attachments/assets/3656cfbf-5632-4fad-b73a-5b37af5c2c8b)
 
+![image](https://github.com/user-attachments/assets/641e3b7f-2119-40a9-8598-c1d0804e0c18)
+
 # Compiling
 
 Add references to:
