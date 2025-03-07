@@ -1,5 +1,7 @@
 Requires: https://thunderstore.io/c/for-the-king/p/BepInEx/BepInExPack_ForTheKing/
 
+Nexus mods: https://www.nexusmods.com/fortheking/mods/10
+
 __Every player must have the mod installed.__
 
 # Mod
