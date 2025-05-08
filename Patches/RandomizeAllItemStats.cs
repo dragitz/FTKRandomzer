@@ -40,7 +40,7 @@ namespace FTKRandomizer.Patches
                 {
                     // set new skill to item
                     Array values = Enum.GetValues(typeof(FTK_weaponStats2.SkillType));
-                    var skill = (FTK_weaponStats2.SkillType)values.GetValue(rand.Next(1, 7));
+                    var skill = (FTK_weaponStats2.SkillType)values.GetValue(rand.Next(0, 7));
                     __result._skilltest = skill;
 
                     // the idea is to equally distribute all skills, this way players have a higher probability of finding something that works for them
