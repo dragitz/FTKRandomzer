@@ -18,6 +18,7 @@ namespace FTKRandomizer.Patches
         [HarmonyPrefix]
         static bool shopPricesPatch(CharacterOverworld _cow, MiniHexInfo _poi, FTK_itembase __instance, ref int __result)
         {
+            Console.WriteLine("@@@@@@@@@@" + GameLogic.Instance.m_MapGenRandomSeed + " RandomizeDShopPrices");
 
             int newPrice;
 

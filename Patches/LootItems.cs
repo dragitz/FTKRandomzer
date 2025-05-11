@@ -17,6 +17,8 @@ namespace FTKRandomizer.Patches
         [HarmonyPrefix]
         static bool FillLootDropListPatch(ArrayList _arrayList, int _playerCount, FTK_enemyCombat.ItemDrops[] _itemDrops, int[] _itemDropLevels, RewardData _rewards, ref int _perPlayerGold, ref int _perPlayerXP, bool _endDungeon)
         {
+            Console.WriteLine("@@@@@@@@@@" + GameLogic.Instance.m_MapGenRandomSeed + " LootItems");
+
             int MapSeed = GameLogic.Instance.m_MapGenRandomSeed;
             int Turn = GameFlow.Instance.m_RoundCount;
             int PTurn = (int)GameFlowMC.Instance.m_TurnCount;

@@ -15,6 +15,8 @@ namespace FTKRandomizer.Patches
         [HarmonyPrefix]
         static bool Prefix(FTK_progressionTier.ID _tier, ref List<FTK_itembase.ID> __result, TownManager __instance)
         {
+            Console.WriteLine("@@@@@@@@@@" + GameLogic.Instance.m_MapGenRandomSeed + " RandomizeDShopItems");
+
             System.Random rand = new System.Random();
             Array values = Enum.GetValues(typeof(FTK_itembase.ID));
             FTK_itembase.ID[] randomIds = new FTK_itembase.ID[10];  // <-- 10 new items in the shop

@@ -11,7 +11,6 @@ namespace FTKRandomizer.Patches
     [HarmonyPatch(typeof(Weapon), "GetProficiencyIDs")]
     class RandomizeDItemEffects
     {
-
         // WeaponID:ProficiencyID
         public static Dictionary<FTK_proficiencyTable.ID, FTK_proficiencyTable.ID> ProfDB = new Dictionary<FTK_proficiencyTable.ID, FTK_proficiencyTable.ID>();
         public static List<FTK_proficiencyTable.ID> UsedProf = new List<FTK_proficiencyTable.ID>();
@@ -19,6 +18,8 @@ namespace FTKRandomizer.Patches
 
         static bool Prefix(Weapon __instance, ref List<FTK_proficiencyTable.ID> __result)
         {
+            Console.WriteLine("@@@@@@@@@@" + GameLogic.Instance.m_MapGenRandomSeed + " RandomizeDItemEffects");
+
             // Default behavior when gamelogic does not exist
             List<FTK_proficiencyTable.ID> list = new List<FTK_proficiencyTable.ID>();
             if (GameLogic.Instance == null)

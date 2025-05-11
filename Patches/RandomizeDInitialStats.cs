@@ -5,6 +5,8 @@ using RoomDef;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static FTKRandomizer.Randomizer;
+using static Rewired.ComponentControls.Effects.RotateAroundAxis;
 
 
 
@@ -17,11 +19,19 @@ namespace FTKRandomizer.Patches
         [HarmonyPrefix]
         static bool InitializePatch(CharacterOverworld __instance)
         {
+            
+            Console.WriteLine("@@@@@@@@@@ " + GameLogic.Instance.m_MapGenRandomSeed + " RandomizeDInitialStats");
+
             // Randomize stats
             int MapSeed = GameLogic.Instance.m_MapGenRandomSeed;
             int PHealth = __instance.m_CharacterStats.MaxHealth;
             int Gold = __instance.m_CharacterStats.m_Gold;
             string CharacterName = __instance.m_CharacterStats.m_CharacterName;
+
+            // Flag to prevent infinite buff
+            if (!Randomizer.CustomData.SeedInitialized)
+                Randomizer.SetupRandomizer(MapSeed);
+
 
 
             int num = (int)__instance.m_PhotonView.instantiationData[1];
@@ -31,14 +41,6 @@ namespace FTKRandomizer.Patches
             int bigHexIndex = (int)__instance.m_PhotonView.instantiationData[5];
             int smallHexIndex = (int)__instance.m_PhotonView.instantiationData[6];
             __instance.m_SpawnHex = FTKHex.Instance.GetHexLand(bigHexIndex, smallHexIndex);
-
-            // Every player should be in sync with this
-            int SEED = MapSeed;
-            SEED += PHealth;
-            SEED += Gold;
-            SEED += CharacterName.Length;
-            SEED += characterClass + photonID;
-            System.Random rand = new System.Random(SEED);
 
 
             FTKHub.Instance.m_SessionStartHex = __instance.m_SpawnHex;
@@ -62,82 +64,40 @@ namespace FTKRandomizer.Patches
             __instance.m_CustomOutfit.m_ArmorID = FTK_customizeArmor.ID.None;
 
 
-            var turns = GameFlow.Instance.m_RoundCount;
-            Debug.Log("===============");
-            Debug.Log("=============== Creation: " + turns);
 
-            if (turns == 0)
-            {
-                Debug.Log("=============== " + __instance.m_CharacterStats.m_AugmentedToughness);
-                Debug.Log("=============== " + __instance.m_CharacterStats.m_AugmentedVitality);
-                Debug.Log("=============== " + __instance.m_CharacterStats.m_AugmentedTalent);
-                Debug.Log("=============== " + __instance.m_CharacterStats.m_AugmentedAwareness);
-                Debug.Log("=============== " + __instance.m_CharacterStats.m_AugmentedQuickness);
+            // HERE ASSIGN STATS
+            // Apply values
+            // Randomize all values
             
-            
-                float maxValue = 0.02f;
+            System.Random rand = new System.Random(MapSeed + num);
 
-                float[] randos = new float[5];
+            float maxValue = 0.02f;
 
-                randos[0] = (float)rand.NextDouble() * maxValue;
-                randos[1] = (float)rand.NextDouble() * maxValue;
-                randos[2] = (float)(-maxValue * rand.NextDouble());
-                randos[3] = (float)(-maxValue * rand.NextDouble());
-                randos[4] = (float)(rand.NextDouble() * (maxValue * 2) - maxValue);
+            var stats = (PlayerStats)Randomizer.CustomData.PlayerStatsInitial[num.ToString()];
+            float toughness = stats.toughness;
+            float vitality  = stats.vitality;
+            float talent    = stats.talent;
+            float awareness = stats.awareness;
+            float quickness = stats.quickness;
 
-                for (int i = 0; i < randos.Length - 1; ++i) // shuffle, thank you https://stackoverflow.com/a/69504187
-                {
-                    int r = rand.Next(i, randos.Length);
-                    (randos[r], randos[i]) = (randos[i], randos[r]);
-                }
+            __instance.m_CharacterStats.m_AugmentedToughness += toughness;
+            __instance.m_CharacterStats.m_AugmentedVitality += vitality;
 
-                // Randomize all values
-                float toughness = randos[0];
-                float vitality = randos[1];
-                int damageMagic = rand.Next(-5, 6);  // -5 to 5
-                float talent = randos[2];
-                float awareness = randos[3];
-                float quickness = randos[4];
-            
-                // Check if all are negative
-                //if (toughness <= 0 && vitality <= 0 && damageMagic <= 0 &&
-                //    talent <= 0 && awareness <= 0 && quickness <= 0)
-                //{
-                //    // Force at least one positive value
-                //    int forcePositive = rand.Next(0, 6);
-                //    switch (forcePositive)
-                //    {
-                //        case 0: toughness = Math.Abs(toughness); break;
-                //        case 1: vitality = Math.Abs(vitality); break;
-                //        case 2: damageMagic = Math.Abs(damageMagic) + 1; break;
-                //        case 3: talent = Math.Abs(talent); break;
-                //        case 4: awareness = Math.Abs(awareness); break;
-                //        case 5: quickness = Math.Abs(quickness); break;
-                //    }
-                //}
-            
-            
-            
-                // Apply values
-                __instance.m_CharacterStats.m_AugmentedToughness += toughness;
-                __instance.m_CharacterStats.m_AugmentedVitality += vitality;
-            
-                // base damage                
-                //__instance.m_CharacterStats.m_AugmentedDamageMagic += damageMagic;
-                //__instance.m_CharacterStats.m_AugmentedDamagePhysical += damageMagic;
+            // base damage                
+            //__instance.m_CharacterStats.m_AugmentedDamageMagic += damageMagic;
+            //__instance.m_CharacterStats.m_AugmentedDamagePhysical += damageMagic;
 
-                __instance.m_CharacterStats.m_AugmentedTalent += talent;
-                __instance.m_CharacterStats.m_AugmentedAwareness += awareness;
-                __instance.m_CharacterStats.m_AugmentedQuickness += quickness;
-            
-                __instance.m_CharacterStats.m_AugmentedLuck += (float)(rand.NextDouble() * (maxValue * 2) - maxValue);
+            __instance.m_CharacterStats.m_AugmentedTalent += talent;
+            __instance.m_CharacterStats.m_AugmentedAwareness += awareness;
+            __instance.m_CharacterStats.m_AugmentedQuickness += quickness;
 
-                // focus is an interesting one to change, but the evade is risky
-                __instance.m_CharacterStats.m_AugmentedEvadeRating += (float)(rand.NextDouble() * (maxValue * 2) - maxValue);
-                __instance.m_CharacterStats.m_AugmentedMaxFocus += rand.Next(-1, 2);
-            }
+            __instance.m_CharacterStats.m_AugmentedLuck += (float)(rand.NextDouble() * (maxValue * 2) - maxValue);
 
-            
+            // focus is an interesting one to change, but the evade is risky
+            __instance.m_CharacterStats.m_AugmentedEvadeRating += (float)(rand.NextDouble() * (maxValue * 2) - maxValue);
+            __instance.m_CharacterStats.m_AugmentedMaxFocus += rand.Next(-1, 3);
+
+
 
             if (11 < __instance.m_PhotonView.instantiationData.Length)
             {
