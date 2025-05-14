@@ -92,6 +92,7 @@ namespace FTKRandomizer
             {
                 // This filters out test and debug items
                 //if (item.m_FilterDebug) { continue; }
+                if (item.m_ID == null || item.m_ID.Length < 2 || item.m_ID.Contains("STR_")) { continue; }
 
                 // Do not alter important items
                 if (item.m_ItemRarity == FTK_itemRarityLevel.ID.lore || item.m_ItemRarity == FTK_itemRarityLevel.ID.quest) { continue; }
@@ -198,7 +199,7 @@ namespace FTKRandomizer
             harmony.PatchAll(typeof(RandomizeDShopItems));
             harmony.PatchAll(typeof(RandomizeDInitialStats));
             harmony.PatchAll(typeof(RandomizeAllItemStats));
-            //harmony.PatchAll(typeof(TownEE));
+            harmony.PatchAll(typeof(TownEE));
 
             harmony.PatchAll(typeof(LootItems));
             harmony.PatchAll(typeof(RandomizeDItemEffects));

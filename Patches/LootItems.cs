@@ -111,6 +111,7 @@ namespace FTKRandomizer.Patches
                             entry == null ||
 
                             // some items don't have a rarity assigned, prevents softlock after battle when obtaining wip items (eg. "valeore" )
+                            entry.m_ID.Length < 2 ||
                             entry.m_ItemRarity == FTK_itemRarityLevel.ID.None ||
                             entry.m_ItemRarity == FTK_itemRarityLevel.ID.quest ||
                             entry.m_ItemRarity == FTK_itemRarityLevel.ID.lore ||
