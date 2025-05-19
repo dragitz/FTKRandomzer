@@ -19,7 +19,7 @@ namespace FTKRandomizer.Patches
 
             System.Random rand = new System.Random();
             Array values = Enum.GetValues(typeof(FTK_itembase.ID));
-            FTK_itembase.ID[] randomIds = new FTK_itembase.ID[10];  // <-- 10 new items in the shop
+            FTK_itembase.ID[] randomIds = new FTK_itembase.ID[15];  // <-- 10 new items in the shop
 
             var SEED = GameLogic.Instance.m_MapGenRandomSeed;
 
@@ -47,7 +47,7 @@ namespace FTKRandomizer.Patches
             rand = new System.Random(SEED + Incrementer);
 
             FTK_itembase.ID item_id;
-            for (int i = 0; i < 10; i++) // <-- 10 items
+            for (int i = 0; i < 15; i++) // <-- 10 items
             {
                 while (true)
                 {
